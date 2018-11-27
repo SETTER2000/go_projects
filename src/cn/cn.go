@@ -9,19 +9,19 @@ import (
 )
 
 var opts struct {
-	All                    bool `short:"a" long:"all" description:"все доступные варианты."`
-	MeterToCentimeter      bool `short:"q" long:"mc" description:"метры в сантиметры."`
-	MeterToFoot            bool `short:"z" long:"mf" description:"метры в футы."`
-	MeterToMillimeter      bool `short:"x" long:"mtomm" description:"метры в миллиметры."`
-	CentimeterToMeter      bool `short:"w" long:"cm" description:"сантиметры в метры."`
-	CentimeterToFoot       bool `short:"u" long:"cf" description:"сантиметры в футы."`
-	CentimeterToMillimeter bool `short:"v" long:"cmm" description:"сантиметры в миллиметры."`
-	FootToCentimeter       bool `short:"g" long:"fc" description:"футы в сантиметры."`
-	FootToMeter            bool `short:"j" long:"fm" description:"футы в метры."`
-	FootToMillimeter       bool `short:"b" long:"fmm" description:"футы в миллиметры."`
-	MillimeterToMeter      bool `short:"t" long:"mmtom" description:"миллиметры в метры."`
-	MillimeterToFoot       bool `short:"p" long:"mmf" description:"миллиметры в футы."`
-	MillimeterToCentimeter bool `short:"i" long:"mmc" description:"миллиметры в сантиметры."`
+	All                    bool `short:"a" long:"all" description:"все доступные варианты"`
+	MeterToCentimeter      bool `short:"q" long:"mc" description:"метры в сантиметры"`
+	MeterToFoot            bool `short:"z" long:"mf" description:"метры в футы"`
+	MeterToMillimeter      bool `short:"x" long:"mtomm" description:"метры в миллиметры"`
+	CentimeterToMeter      bool `short:"w" long:"cm" description:"сантиметры в метры"`
+	CentimeterToFoot       bool `short:"u" long:"cf" description:"сантиметры в футы"`
+	CentimeterToMillimeter bool `short:"v" long:"cmm" description:"сантиметры в миллиметры"`
+	FootToCentimeter       bool `short:"g" long:"fc" description:"футы в сантиметры"`
+	FootToMeter            bool `short:"j" long:"fm" description:"футы в метры"`
+	FootToMillimeter       bool `short:"b" long:"fmm" description:"футы в миллиметры"`
+	MillimeterToMeter      bool `short:"t" long:"mmtom" description:"миллиметры в метры"`
+	MillimeterToFoot       bool `short:"p" long:"mmf" description:"миллиметры в футы"`
+	MillimeterToCentimeter bool `short:"i" long:"mmc" description:"миллиметры в сантиметры"`
 }
 
 func main() {
