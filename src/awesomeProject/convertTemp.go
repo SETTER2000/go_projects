@@ -11,4 +11,5 @@ func main() {
 	fmt.Println(tempconv.CToK(3))
 	fmt.Println(tempconv.FToK(3))
 	fmt.Println(tempconv.KToC(3))
+	fmt.Println(tempconv.KToF(3))
 }
