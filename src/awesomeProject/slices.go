@@ -141,10 +141,41 @@ func main() {
 	fmt.Println(nameForPoint)
 
 	// В этом отображение целиком было создано применением синтаксиса составных литералов
-	populationForCity := map[string]int{"Istambul": 12610000, "Karachi": 10620000, "Mumbai": 12690000, "Shanghai": 13680000}
+	populationForCity := map[string]int{"Istanbul": 12610000, "Karachi": 10620000, "Mumbai": 12690000, "Shanghai": 13680000}
 	fmt.Println("\nCинтаксис составных литералов:")
 	for city, population := range populationForCity {
 		fmt.Printf("%-15s %8d\n", city, population)
 	}
+
+	/*
+		Поиск по отображению. Вариант 1
+		Если выполняется поиск по ключу, присутствующему в отображе-
+		нии, возвращается соответствующее ему значение. Но если искомый
+		ключ отсутствует, возвращается нулевое значение данного типа.
+	*/
+
+	population := populationForCity["Mumbai"]
+	fmt.Println("\nПоиск по отображению. Вариант 1:\nMumbai’s population is", population)
+	population = populationForCity["Emerald City"]
+	fmt.Println("Emerald City’s population is", population)
+
+	/*
+		Поиск по отображению. Вариант 2
+		0 для ключа "Emerald City" нельзя
+		сказать, означает ли оно, что в городе Emerald City действительно
+		отсутствует население или этот город отсутствует в отображении.
+		Решение этой проблемы предлагает второй способ поиска.
+	*/
+
+	fmt.Printf("\nПоиск по отображению. Вариант 2:\n")
+	city := "Istanbul"
+	if population, found := populationForCity[city]; found {
+		fmt.Printf("%s's population is %d\n", city, population)
+	} else {
+		fmt.Printf("%s's population data is unavailable\n", city)
+	}
+	city = "Emerald City"
+	_, present := populationForCity[city]
+	fmt.Printf("%q is in the map == %t\n", city, present)
 
 }
