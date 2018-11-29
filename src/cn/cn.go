@@ -26,7 +26,7 @@ var opts struct {
 
 func main() {
 	flags.Parse(&opts)
-	st := "%s = %.2f "
+	st := "%-6s = %.2f "
 	for _, arg := range os.Args[2:] {
 		d, err := strconv.ParseFloat(arg, 64)
 		if err != nil {
