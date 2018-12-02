@@ -26,7 +26,7 @@ var opts struct {
 	MillimeterToFoot       bool `short:"p" long:"mmf" description:"миллиметры в футы"`
 	MillimeterToCentimeter bool `short:"i" long:"mmc" description:"миллиметры в сантиметры"`
 	MillimeterToInch       bool `short:"k" long:"mmi" description:"миллиметры в дюймы"`
-	InchToMillimeter       bool `short:"в" long:"imm" description:"дюймы в миллиметры"`
+	InchToMillimeter       bool `short:"m" long:"imm" description:"дюймы в миллиметры"`
 	InchToCentimeter       bool `short:"s" long:"ic" description:"дюймы в сантиметры"`
 	InchToMeter            bool `short:"d" long:"im" description:"дюймы в метры"`
 	InchToFoot             bool `short:"f" long:"if" description:"дюймы в футы"`
@@ -34,7 +34,7 @@ var opts struct {
 
 func main() {
 	flags.Parse(&opts)
-	st := "%s = %.3f "
+	st := "%-4s = %.2f "
 	for _, arg := range os.Args[2:] {
 		d, err := strconv.ParseFloat(arg, 64)
 		if err != nil {
