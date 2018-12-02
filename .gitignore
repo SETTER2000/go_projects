@@ -19,3 +19,5 @@ src/google.golang.org
 src/gopkg.in
 src/gopl.io
 src/tempconv
+src/distapp
+src/gx
