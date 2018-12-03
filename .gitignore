@@ -13,10 +13,11 @@
 .idea/
 pkg/
 src/cloud.google.com
-src/github.com
-src/golang.org
+src/*.com
+src/*.org
 src/google.golang.org
-src/gopkg.in
+src/*.in
+src/*.co
 src/gopl.io
 src/tempconv
 src/distapp
