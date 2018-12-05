@@ -17,6 +17,7 @@ src/tempconv
 src/distapp
 src/lengconv
 src/gx
+src/auth0-react-samples
 src/*.com
 src/*.io
 src/*.org

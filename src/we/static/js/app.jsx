@@ -1,13 +1,12 @@
 var App = React.createClass({
-    componentWillMount: function () {
+    componentWillMount: function() {
         this.setupAjax();
         this.parseHash();
         this.setState();
     },
-    // Добавьте access_token, если доступно с каждым запросом XHR к API
-    setupAjax: function () {
+    setupAjax: function() {
         $.ajaxSetup({
-            'beforeSend': function (xhr) {
+            'beforeSend': function(xhr) {
                 if (localStorage.getItem('access_token')) {
                     xhr.setRequestHeader('Authorization',
                         'Bearer ' + localStorage.getItem('access_token'));
@@ -15,17 +14,16 @@ var App = React.createClass({
             }
         });
     },
-    //Извлеките access_token и id_token из Auth0 Callback после входа в систему
-    parseHash: function () {
+    parseHash: function(){
         this.auth0 = new auth0.WebAuth({
-            domain: AUTH0_DOMAIN,
-            clientID: AUTH0_CLIENT_ID
+            domain:       AUTH0_DOMAIN,
+            clientID:     AUTH0_CLIENT_ID
         });
-        this.auth0.parseHash(window.location.hash, function (err, authResult) {
+        this.auth0.parseHash(window.location.hash, function(err, authResult) {
             if (err) {
                 return console.log(err);
             }
-            if (authResult !== null && authResult.accessToken !== null && authResult.idToken !== null) {
+            if(authResult !== null && authResult.accessToken !== null && authResult.idToken !== null){
                 localStorage.setItem('access_token', authResult.accessToken);
                 localStorage.setItem('id_token', authResult.idToken);
                 localStorage.setItem('profile', JSON.stringify(authResult.idTokenPayload));
@@ -33,113 +31,106 @@ var App = React.createClass({
             }
         });
     },
-    // Настройка состояния входа в систему
-    setState: function () {
+    setState: function(){
         var idToken = localStorage.getItem('id_token');
-        if (idToken) {
+        if(idToken){
             this.loggedIn = true;
         } else {
             this.loggedIn = false;
         }
     },
-    render: function () {
+    render: function() {
 
         if (this.loggedIn) {
-            return (<LoggedIn/>);
+            return (<LoggedIn />);
         } else {
-            return (<Home/>);
+            return (<Home />);
         }
     }
 });
 
 var Home = React.createClass({
-    // Щелчок по ссылке для входа в систему перенаправляет пользователя на страницу Hosted Lock
-    // где пользователь предоставит свои учетные данные и затем будет перенаправлен
-    // вернуться к приложению
-    authenticate: function () {
+    authenticate: function(){
         this.webAuth = new auth0.WebAuth({
-            domain: AUTH0_DOMAIN,
-            clientID: AUTH0_CLIENT_ID,
-            scope: 'openid profile',
-            audience: AUTH0_API_AUDIENCE,
+            domain:       AUTH0_DOMAIN,
+            clientID:     AUTH0_CLIENT_ID,
+            scope:        'openid profile',
+            audience:     AUTH0_API_AUDIENCE,
             responseType: 'token id_token',
-            redirectUri: AUTH0_CALLBACK_URL
+            redirectUri : AUTH0_CALLBACK_URL
         });
         this.webAuth.authorize();
     },
-    render: function () {
+    render: function() {
         return (
             <div className="container">
                 <div className="col-xs-12 jumbotron text-center">
                     <h1>We R VR</h1>
                     <p>Provide valuable feedback to VR experience developers.</p>
-                    <a className="btn btn-primary btn-lg btn-login btn-block">Sign In</a>
+                    <a onClick={this.authenticate} className="btn btn-primary btn-lg btn-login btn-block">Sign In</a>
                 </div>
             </div>);
     }
 });
 
 var LoggedIn = React.createClass({
-    // Если пользователь выйдет из системы, мы удалим их токены и информацию о профиле
-    logout: function () {
+    logout : function(){
         localStorage.removeItem('id_token');
         localStorage.removeItem('access_token');
         localStorage.removeItem('profile');
         location.reload();
     },
-    getInitialState: function () {
+
+    getInitialState: function() {
         return {
             products: []
         }
     },
-    // Как только эти компоненты смонтированы, мы обратимся к API для получения данных о продукте
-    componentDidMount: function () {
+    componentDidMount: function() {
         this.serverRequest = $.get('http://localhost:3000/products', function (result) {
             this.setState({
                 products: result,
             });
         }.bind(this));
     },
-    render: function () {
+
+    render: function() {
         return (
             <div className="col-lg-12">
                 <span className="pull-right"><a onClick={this.logout}>Log out</a></span>
                 <h2>Welcome to We R VR</h2>
-                <p>Below you'll find the latest games that need feedback. Please provide honest feedback so developers can make the best
-                    games.</p>
+                <p>Below you'll find the latest games that need feedback. Please provide honest feedback so developers can make the best games.</p>
                 <div className="row">
 
-                    {this.state.products.map(function (product, i) {
-                        return <Product key={i} product={product}/>
+                    {this.state.products.map(function(product, i){
+                        return <Product key={i} product={product} />
                     })}
+
                 </div>
             </div>);
     }
 });
 
 var Product = React.createClass({
-    // Функции upvote и downvote отправят запрос API на бэкэнд
-    // Эти вызовы также отправят access_token и будут проверены до ответа на успех
-    // возвращается
-    upvote: function () {
+    upvote : function(){
         var product = this.props.product;
-        this.serverRequest = $.post('http://localhost:3000/products/' + product.Slug + '/feedback', {vote: 1}, function (result) {
+        this.serverRequest = $.post('http://localhost:3000/products/' + product.Slug + '/feedback', {vote : 1}, function (result) {
             this.setState({voted: "Upvoted"})
         }.bind(this));
     },
-    downvote: function () {
+    downvote: function(){
         var product = this.props.product;
-        this.serverRequest = $.post('http://localhost:3000/products/' + product.Slug + '/feedback', {vote: -1}, function (result) {
+        this.serverRequest = $.post('http://localhost:3000/products/' + product.Slug + '/feedback', {vote : -1}, function (result) {
             this.setState({voted: "Downvoted"})
         }.bind(this));
     },
-    getInitialState: function () {
+    getInitialState: function() {
         return {
             voted: null
         }
     },
-    render: function () {
-        return (
+    render : function(){
+        return(
             <div className="col-xs-4">
                 <div className="panel panel-default">
                     <div className="panel-heading">{this.props.product.Name} <span className="pull-right">{this.state.voted}</span></div>
@@ -158,4 +149,6 @@ var Product = React.createClass({
             </div>);
     }
 })
-ReactDOM.render(<App/>, document.getElementById('app'));
+
+ReactDOM.render(<App />,
+    document.getElementById('app'));

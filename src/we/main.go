@@ -2,17 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/auth0-community/auth0"
-	"github.com/gorilla/mux"
-	"net/http"
-	// Добавить зависимость пакетов обработчиков
-	//jwtmiddleware "github.com/auth0/go-jwt-middleware"
-	//jwt "github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/handlers"
-	"os"
-	//	"time"
 	"fmt"
-	jose "gopkg.in/square/go-jose.v2"
+	//"github.com/auth0-community/auth0"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	//"gopkg.in/square/go-jose.v2"
+	"net/http"
+	"os"
+	"strings"
+	"io/ioutil"
 )
 
 /*
@@ -66,15 +64,31 @@ func main() {
 
 func authMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		secret := []byte("{API_CLIENT_SECRET}")
+		/*secret := []byte("Dqkhl5upab2ZUHi0gbPqHinuDwmiIFjhIPy4-W5CP_nLJsc7yl_Egolyebo7QTw_")
 		secretProvider := auth0.NewKeyProvider(secret)
-		audience := []string{"{AUTH0_API_AUDIENCE}"}
+		audience := []string{"angular"}
 
-		configuration := auth0.NewConfiguration(secretProvider, audience, "https://{AUTH0_DOMAIN}.auth0.com/", jose.HS256)
-		validator := auth0.NewValidator(configuration)
+		fmt.Println(audience)
+		fmt.Println(secretProvider)
+		configuration := auth0.NewConfiguration(secretProvider,  audience, "https://setter.auth0.com/", jose.HS256)
+		validator := auth0.NewValidator(configuration, nil)
+*/
 
-		token, err := validator.ValidateRequest(r)
+		url := "https://setter.auth0.com/oauth/token"
 
+		payload := strings.NewReader("{\"client_id\":\"1kMLKoxmMtvvGQHeGm4LkpF3jN1R2tD1\",\"client_secret\":\"Dqkhl5upab2ZUHi0gbPqHinuDwmiIFjhIPy4-W5CP_nLJsc7yl_Egolyebo7QTw_\",\"audience\":\"angular\",\"grant_type\":\"client_credentials\"}")
+
+		req, _ := http.NewRequest("POST", url, payload)
+
+		req.Header.Add("content-type", "application/json")
+
+		res, _ := http.DefaultClient.Do(req)
+
+		defer res.Body.Close()
+		token, err := ioutil.ReadAll(res.Body)
+		//token, err := validator.ValidateRequest(r)
+		//fmt.Println(res)
+		fmt.Println(string(token))
 		if err != nil {
 			fmt.Println(err)
 			fmt.Println("Token is not valid:", token)
