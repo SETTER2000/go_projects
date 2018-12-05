@@ -16,7 +16,6 @@ src/tempconv
 src/distapp
 src/lengconv
 src/gx
-src/dmitri.*
 src/*.com
 src/*.io
 src/*.org
