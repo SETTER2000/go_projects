@@ -22,7 +22,7 @@ src/gopl.io
 src/tempconv
 src/distapp
 src/gx
-src/dmitri.shuralyov.com
+src/dmitri.*
 src/github.com
 src/go.opencensus.io
 src/go4.org
