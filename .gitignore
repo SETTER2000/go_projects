@@ -12,6 +12,7 @@
 *.out
 .idea/
 pkg/
+bin/
 src/tempconv
 src/distapp
 src/lengconv
