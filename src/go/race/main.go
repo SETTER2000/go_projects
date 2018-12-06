@@ -27,12 +27,16 @@ func main() {
 		чтоб она дождалась пока все сопрограммы закончатся, т.е. вызовут wg.Done()
 	*/
 	wg.Wait()
+
+
 	fmt.Println("Words that appear more than once:")
+	w.Lock() // Установка блокировки. Устранение эффета гонки (мьютексов).
 	for word, count := range w.found {
 		if count > 1 {
 			fmt.Printf("%s: %d\n", word, count)
 		}
 	}
+	w.Unlock() // Снятие блокировки
 }
 
 /*
@@ -41,6 +45,7 @@ func main() {
 но применение структуры облегчит в дальнейшем реструктуризацию кода
 */
 type words struct {
+	sync.Mutex // Структура words теперь наследует мьютекс
 	found map[string]int
 }
 
@@ -51,6 +56,7 @@ func newWord() *words { // Создание нового экземляра сл
 // Фиксируется кол-во вхождений этого слова. Если слово ещё на зафиксировано,
 // добавить его. В противном случае увеличитм счётчик
 func (w *words) add(word string, n int) {
+	w.Lock() // Заблокировать объект, изменить и разблокировать
 	count, ok := w.found[word]
 	if !ok {
 		w.found[word] = n
