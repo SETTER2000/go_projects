@@ -57,6 +57,7 @@ func newWord() *words { // Создание нового экземляра сл
 // добавить его. В противном случае увеличитм счётчик
 func (w *words) add(word string, n int) {
 	w.Lock() // Заблокировать объект, изменить и разблокировать
+	defer w.Unlock()
 	count, ok := w.found[word]
 	if !ok {
 		w.found[word] = n
