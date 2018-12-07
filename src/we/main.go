@@ -7,10 +7,10 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	//"gopkg.in/square/go-jose.v2"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
-	"io/ioutil"
 )
 
 /*
@@ -72,7 +72,7 @@ func authMiddleware(next http.Handler) http.Handler {
 		fmt.Println(secretProvider)
 		configuration := auth0.NewConfiguration(secretProvider,  audience, "https://setter.auth0.com/", jose.HS256)
 		validator := auth0.NewValidator(configuration, nil)
-*/
+		*/
 
 		url := "https://setter.auth0.com/oauth/token"
 

@@ -65,9 +65,9 @@ var Home = React.createClass({
         return (
             <div className="container">
                 <div className="col-xs-12 jumbotron text-center">
-                    <h1>We R VR</h1>
-                    <p>Provide valuable feedback to VR experience developers.</p>
-                    <a onClick={this.authenticate} className="btn btn-primary btn-lg btn-login btn-block">Sign In</a>
+                    <h1>{APP_NAME}</h1>
+                    <p>{APP_DESCRIPTION}</p>
+                    <a onClick={this.authenticate} className="btn btn-primary btn-lg btn-login btn-block">{SIGN_IN}</a>
                 </div>
             </div>);
     }
