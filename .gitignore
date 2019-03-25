@@ -12,6 +12,7 @@
 *.out
 .idea/
 .cache/
+src/we/
 pkg/
 bin/
 src/tempconv
