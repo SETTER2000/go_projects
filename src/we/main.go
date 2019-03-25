@@ -45,6 +45,7 @@ func main() {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	/* Мы добавим промежуточное ПО к нашим продуктам и маршрутам обратной связи.
 	Маршрут статуса будет общедоступным */
+
 	r.Handle("/products", authMiddleware(ProductsHandler)).Methods("GET")
 	r.Handle("/products/{slug}/feedback", authMiddleware(AddFeedbackHandler)).Methods("POST")
 
@@ -59,7 +60,7 @@ func main() {
 	// Здесь мы объявляем порт и передаем наш маршрутизатор.
 	// Оберните функцию LoggingHandler вокруг нашего маршрутизатора,
 	// чтобы регистратор был вызван первым в каждом запросе маршрута
-	http.ListenAndServe(":3000", handlers.LoggingHandler(os.Stdout, r))
+	http.ListenAndServe(":3008", handlers.LoggingHandler(os.Stdout, r))
 }
 
 func authMiddleware(next http.Handler) http.Handler {
@@ -82,7 +83,9 @@ func authMiddleware(next http.Handler) http.Handler {
 
 		req.Header.Add("content-type", "application/json")
 
+
 		res, _ := http.DefaultClient.Do(req)
+
 
 		defer res.Body.Close()
 		token, err := ioutil.ReadAll(res.Body)
@@ -117,6 +120,7 @@ var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	payload, _ := json.Marshal(products)
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Write([]byte(payload))
 })
 
