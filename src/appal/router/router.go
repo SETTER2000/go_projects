@@ -10,5 +10,6 @@ func New() *gin.Engine {
 	r.GET("/user/:name/*action", userHandler)
 	r.GET("/search/:category", collectHandler)
 	r.GET("/result/:category", resultHandler)
+	r.GET("/welcome", welcome)
 	return r
 }
