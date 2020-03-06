@@ -137,16 +137,19 @@ func stdDev(numbers []float64) float64 {
 
 func mode(numbers []float64) []float64 {
 	var s []float64
-
-fmt.Println(numbers)
-	for _, x := range numbers{
+	var n float64
+	for k, x := range numbers {
 		var i int
-		for _, y := range numbers{
-			if x == y{
+		for _, y := range numbers[k:] {
+			if x == y {
 				i++
 			}
-			if i >=2 {
-			s =	append(s,x)
+			if i == 2 {
+				if n != y{
+					s = append(s, y)
+					n = s[len(s)-1]
+					break
+				}
 			}
 		}
 	}
