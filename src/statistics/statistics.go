@@ -161,8 +161,8 @@ func countDig(numbers []float64) (countDig []float64, err error) {
 	if len(numbers) < 2 {
 		return nil, errors.New("Ошибка! Кол-во чисел во входящих данных не должно быть меньше двух!")
 	}
-	n := numbers[0]
-	y := numbers[1]
+	y := numbers[0]
+	n := numbers[1]
 	x := math.Pow(n, y)
 	countDig = append(countDig, x)
 	fmt.Printf("Кол-во вариантов %v-символьного пароля из %v цифр: %v\n", y, n,  countDig)
