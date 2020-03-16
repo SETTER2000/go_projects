@@ -14,6 +14,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -38,18 +39,42 @@ const (
 )
 
 type statistics struct {
-	numbers []float64
-	mode    []float64
-	mean    float64
-	median  float64
-	stdDev  float64
+	numbers    []float64
+	mode       []float64
+	mean       float64
+	median     float64
+	stdDev     float64
+	passOption []float64
+	nk         []float64
+	countDig         []float64
+	err        error
 }
 
 func main() {
 	http.HandleFunc("/", homePage)
+	fmt.Println("Run server to port :9001")
 	if err := http.ListenAndServe(":9001", nil); err != nil {
 		log.Fatal("failed to start server", err)
 	}
+}
+
+func factorial(num int) (factorial int) {
+	factorial = 1
+	ch := num
+	for num > 1 {
+		factorial *= num
+		num--
+	}
+	fmt.Printf("factorial числа %v = %v\n", ch, factorial)
+	return factorial
+}
+
+func passOption(numbers []float64) (passOption []float64) {
+	for _, n := range numbers {
+		fmt.Printf("%v вариантов комбинаций паролей из %v-значного пароля\n", factorial(int(n)), n)
+		passOption = append(passOption, float64(factorial(int(n))))
+	}
+	return passOption
 }
 
 func homePage(writer http.ResponseWriter, request *http.Request) {
@@ -95,8 +120,11 @@ func formatStats(stats statistics) string {
 <tr><td>Median</td><td>%f</td></tr>
 <tr><td>Std. Dev</td><td>%f</td></tr>
 <tr><td>Mode</td><td>%v</td></tr>
+<tr><td>Factorials</td><td>%v</td></tr>
+<tr><td>Кол-во комбинаций:</td><td>%v</td></tr>
+<tr><td>Вариаций пароля:</td><td>%v</td></tr>
 
-</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median, stats.stdDev, stats.mode)
+</table><hr>%v`, stats.numbers, len(stats.numbers), stats.mean, stats.median, stats.stdDev, stats.mode, stats.passOption, stats.nk, stats.countDig, stats.err)
 }
 
 func getStats(numbers []float64) (stats statistics) {
@@ -106,7 +134,40 @@ func getStats(numbers []float64) (stats statistics) {
 	stats.median = median(numbers)
 	stats.stdDev = stdDev(numbers)
 	stats.mode = mode(numbers)
+	stats.passOption = passOption(numbers)
+	stats.nk, stats.err = nk(numbers)
+	stats.countDig, stats.err = countDig(numbers)
 	return stats
+}
+
+func nk(numbers []float64) (nk []float64, err error) {
+	if len(numbers) < 2 {
+		return nil, errors.New("Ошибка! Кол-во чисел во входящих данных не должно быть меньше двух!")
+	}
+	n := numbers[0]
+	k := numbers[1]
+	x := float64(factorial(int(n)) / (factorial(int(k)) * factorial(int(n)-int(k))))
+	nk = append(nk, x)
+	fmt.Printf("Кол-во вариантов %v-символьного пароля из двух букв, где первая буква повторяется %v раз, а вторая повторяется %v раз: %v\n", n, k, int(n)-int(k), nk)
+
+	return nk, nil
+}
+
+func countDig(numbers []float64) (countDig []float64, err error) {
+	/**
+	Сколько всех четырехзначных чисел можно составить из цифр 1, 5, 6, 7, 8?
+	Решение. Для каждого разряда четырехзначного числа имеется пять возможностей, значит N=5*5*5*5=5степень4=625.
+	 */
+	if len(numbers) < 2 {
+		return nil, errors.New("Ошибка! Кол-во чисел во входящих данных не должно быть меньше двух!")
+	}
+	n := numbers[0]
+	y := numbers[1]
+	x := math.Pow(n, y)
+	countDig = append(countDig, x)
+	fmt.Printf("Кол-во вариантов %v-символьного пароля из %v цифр: %v\n", y, n,  countDig)
+
+	return countDig, nil
 }
 
 func sum(numbers []float64) (total float64) {
@@ -145,7 +206,7 @@ func mode(numbers []float64) []float64 {
 				i++
 			}
 			if i == 2 {
-				if n != y{
+				if n != y {
 					s = append(s, y)
 					n = s[len(s)-1]
 					break
