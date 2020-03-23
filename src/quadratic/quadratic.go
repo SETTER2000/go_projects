@@ -7,6 +7,23 @@ import (
 	"strings"
 )
 
+const (
+	pageTop    = `<!DOCTYPE HTML><html><head>
+<style>.error{color:#FF0000;}</style></head>
+<title>Quadratic Equation Solver</title><body>
+<h3>Quadratic Equation Solver</h3><p>Solves equations of the form
+a<i>x</i>² + b<i>x</i> + c</p>`
+	form       = `<form action="/" method="POST">
+<input type="text" name="a" size="1"><label for="a"><i>x</i>²</label> +
+<input type="text" name="b" size="1"><label for="b"><i>x</i></label> +
+<input type="text" name="c" size="1"><label for="c"> →</label>
+<input type="submit" name="calculate" value="Calculate">
+</form>`
+	pageBottom = "</body></html>"
+	error      = `<p class="error">%s</p>`
+	solution   = "<p>%s → %s</p>"
+)
+
 func main() {
 	http.HandleFunc("/", homePage)
 	if err := http.ListenAndServe(":9001", nil); err != nil {
@@ -28,6 +45,10 @@ func homePage(writer http.ResponseWriter, request *http.Request) {
 		}
 	}
 	fmt.Fprint(writer, pageBottom)
+
+	formatQuestion()
+	solve()
+	formatSolutions()
 }
 
 func processRequest(request *http.Request) ([]float64, string, bool) {

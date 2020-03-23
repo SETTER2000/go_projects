@@ -21,6 +21,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -135,9 +136,9 @@ func stdDev(numbers []float64) float64 {
 	return s
 }
 
-func mode(numbers []float64) []float64 {
-	var s []float64
+func mode(numbers []float64) (s []float64) {
 	var n float64
+	fmt.Println("unicode.MaxRune", unicode.MaxRune)
 	for k, x := range numbers {
 		var i int
 		for _, y := range numbers[k:] {
